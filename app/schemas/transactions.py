@@ -20,3 +20,14 @@ class TransactionResponse(BaseModel):
     type: str
     transaction_id: int
     state: str
+
+class TransactionResponseAllInfo(BaseModel):
+    fund_id: int
+    user_id: int
+    amount: float
+    date: str
+    uuid: str
+    type: str
+    transaction_id: int
+    state: str
+    fund_info: dict

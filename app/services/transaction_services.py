@@ -10,8 +10,10 @@ def get_all_transactions():
             
         for transaction in transactions:
             list_transactions.append(transaction.to_dict())
-           
-        return list_transactions 
+        
+        _temp = get_info_funds_by_id_fund(list_transactions)
+        print(_temp) 
+        return _temp 
     except Exception as e:
         print(e)
         
@@ -155,4 +157,40 @@ def send_notification(transaction, typeNotification, db_fs, state, message):
     except Exception as e:
         print(e)
        
-           
+def get_active_linked_funds(user_id):
+    try:
+        user = db_fs.collection('users').where('id', '==', user_id).stream()
+        _temp_linked_funds = []
+        
+        for document in user:
+            _temp_linked_funds = document.to_dict()['linked_funds']
+        
+        get_funds = db_fs.collection('funds').where('id', 'in', _temp_linked_funds).stream()
+        _temp = []
+        
+        for document in get_funds:
+            _temp.append(document.to_dict())
+                    
+        return {"message": "Fondos vinculados.", "linked_funds": _temp, "error": False}
+    except Exception as e:
+        print(e)
+        
+def get_info_funds_by_id_fund(funds):
+    try:
+        _list_funds_id = []
+        for transaction in funds:
+            _list_funds_id.append(transaction['fund_id'])
+            
+        get_funds = db_fs.collection('funds').where('id', 'in', _list_funds_id).stream()
+        _temp = []
+        
+        for document in get_funds:
+            _temp.append(document.to_dict())
+        
+        for transaction in funds:
+            for fund in _temp:
+                if fund['id'] == transaction['fund_id']:
+                    transaction['fund_info'] = fund  
+        return funds
+    except Exception as e:
+        print(e)

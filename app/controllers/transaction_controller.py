@@ -1,5 +1,5 @@
 from fastapi import HTTPException, Response
-from app.services.transaction_services import get_all_transactions, get_index_last_transaction, create_transaction, delete_transaction
+from app.services.transaction_services import get_all_transactions, get_index_last_transaction, create_transaction, delete_transaction, get_active_linked_funds
 
 async def get_all_transactions_controller():
     try:
@@ -36,5 +36,13 @@ async def delete_transaction_controller(transaction_id):
         deleted_transaction = delete_transaction(transaction_id)
 
         return deleted_transaction
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=e)
+
+async def get_active_linked_funds_controller(user_id):
+    try:
+        linked_funds = get_active_linked_funds(user_id)
+        
+        return linked_funds
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)

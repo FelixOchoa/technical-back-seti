@@ -16,6 +16,6 @@ app.add_middleware(
 
 # Firebase Configs
 
-credFB = credentials.Certificate("fund-db-20c7c35b0c9a.json")
+credFB = credentials.Certificate("fund-db-5d5236e74db6.json")
 app_fs = firebase_admin.initialize_app(credFB)
 db_fs = firestore.client()
